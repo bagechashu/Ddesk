@@ -23,10 +23,9 @@
 
 <body>
     <div class="container">
-        <div class="">
-            <div class="column has-text-centered">
-            <h6 class="title">处理工单</h6>
-        </div>
+        <div class="column has-text-centered">
+        <h6 class="title">处理工单</h6>
+        <p class="help">当前登录管理员账号：{{ current_user.name }} <a href="{{ url_for('.logout') }}">退出</a></p>
         </div>
 
         <section class="section">
