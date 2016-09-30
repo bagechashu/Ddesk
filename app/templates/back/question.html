@@ -56,7 +56,12 @@
                         <td>{{ item.title }}</td>
                         <td>{{ item.assignee.name }}</td>
                         <td>{{ item.status }}</td>
-                        <td><a href="{{ url_for('.edit_question', id=item.id) }}">编辑</a></td>
+                        <td>
+                            <a href="{{ url_for('.edit_question', id=item.id) }}">编辑</a>
+                            {% if current_user.super_admin and item.assignee.name == '' %}
+                            <a class="button is-danger is-small" href="{{ url_for('.remind', c='q', id=item.id) }}">夺命叩</a>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

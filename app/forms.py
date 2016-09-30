@@ -110,10 +110,10 @@ class DesignDemandForm(Form):
     submit = SubmitField('提交')
 
 
-# 处理需求类工单d
+# 处理需求类工单
 class DemandIssueForm(Form):
     title = StringField('概述', validators=[DataRequired('概述必填。')])
-    design_done_time = StringField('预计设计完成时间')
+    design_done_time = StringField('预计设计完成时间', validators=[DataRequired('预计设计完成时间必须给出。')])
     online_time = StringField('预计发版上线时间')
     feedback = TextAreaField('反馈内容')
     status = SelectField('当前处理进度', validators=[DataRequired('处理进度必选。')],

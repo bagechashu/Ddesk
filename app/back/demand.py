@@ -34,7 +34,9 @@ def demand():
             item_dict = {'id': item.id, 'title': item.title, 'status': config.ISSUE_STATUS[item.status],
                          'create_time': item.create_time,
                          'creator': {'name': item.creator.name, 'tel': item.creator.tel},
-                         'assignee': {'name': assignee_name}}
+                         'assignee': {'name': assignee_name},
+                         'design_done_time': extend.get('design_done_time'),
+                         'online_time': extend.get('online_time')}
             datas.append(item_dict)
     return render_template('back/demand.html', datas=datas, status_code=status_code)
 
