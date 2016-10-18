@@ -24,7 +24,7 @@ def login():
             return redirect(request.args.get('next') or url_for('.index'))
         else:
             flash('姓名或手机错误，请重新输入。', 'is-danger')
-    return render_template('login.html', form=form, web_title=web_title, web_subtitle=web_subtitle)
+    return render_template('front/login.html', form=form, web_title=web_title, web_subtitle=web_subtitle)
 
 
 @front.route('/logout')

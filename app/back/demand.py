@@ -26,7 +26,7 @@ def demand():
             all_demand = Issue.query.filter(Issue.status != 30).all()
         else:
             all_demand = Issue.query.filter(Issue.status != 30, Issue.assignee_id == current_user.id).all()
-    datas = []
+    data = []
     for item in all_demand:
         extend = eval(item.extend)
         assignee_name = item.assignee.name if item.assignee_id is not None else ''
@@ -37,8 +37,8 @@ def demand():
                          'assignee': {'name': assignee_name},
                          'design_done_time': extend.get('design_done_time'),
                          'online_time': extend.get('online_time')}
-            datas.append(item_dict)
-    return render_template('back/demand.html', datas=datas, status_code=status_code)
+            data.append(item_dict)
+    return render_template('back/demand.html', data=data, status_code=status_code)
 
 
 @back.route('/demand/edit', methods=['GET', 'POST'])
@@ -47,7 +47,7 @@ def edit_demand():
     this_issue = Issue.query.get_or_404(request.args.get('id'))
     all_admin = User.query.filter_by(admin=True).all()
     extend = eval(this_issue.extend)
-    datas = {'id': this_issue.id, 'status': config.ISSUE_STATUS[this_issue.status], 'title': this_issue.title,
+    data = {'id': this_issue.id, 'status': config.ISSUE_STATUS[this_issue.status], 'title': this_issue.title,
              'creator': {'name': this_issue.creator.name, 'tel': this_issue.creator.tel},
              'create_time': this_issue.create_time, 'details': this_issue.details, 'class_id': extend['class_id']}
     if extend['class_id'] == 2:
@@ -61,9 +61,9 @@ def edit_demand():
             support2 = '品牌  '
         if supports.get(38):
             support3 = '设计  '
-        datas['support'] = support1 + support2 + support3
+        data['support'] = support1 + support2 + support3
         des_type = Tag.query.get(extend['des_type_id'])
-        datas['des_type_name'] = des_type.name
+        data['des_type_name'] = des_type.name
         form = DemandIssueForm(feedback=this_issue.feedback, status=this_issue.status,
                                title=this_issue.title, design_done_time=extend.get('design_done_time'))
         form.assignee.choices = [(admin.id, admin.name) for admin in all_admin]
@@ -102,18 +102,18 @@ def edit_demand():
             if request.args.get('type') != 'html5':
                 return redirect(url_for('.demand'))
         if request.args.get('type') == 'html5':
-            return render_template('back/demandEditH5.html', datas=datas, form=form)
+            return render_template('back/demandEditH5.html', data=data, form=form)
         else:
-            return render_template('back/demandEdit.html', datas=datas, form=form)
+            return render_template('back/demandEdit.html', data=data, form=form)
     else:
         audience = Tag.query.get(extend['audience_id'])
         source = Tag.query.get(extend['source_id'])
         d_type = Tag.query.get(extend['type_id'])
         category = Category.query.get(extend['category_id'])
-        datas['audience_name'] = audience.name
-        datas['source'] = source.name
-        datas['type'] = d_type.name
-        datas['category'] = category.name
+        data['audience_name'] = audience.name
+        data['source'] = source.name
+        data['type'] = d_type.name
+        data['category'] = category.name
         form = DemandIssueForm(feedback=this_issue.feedback, status=this_issue.status, title=this_issue.title,
                                design_done_time=extend.get('design_done_time'),
                                online_time=extend.get('online_time'))
@@ -159,6 +159,6 @@ def edit_demand():
             if request.args.get('type') != 'html5':
                 return redirect(url_for('.demand'))
         if request.args.get('type') == 'html5':
-            return render_template('back/demandEditH5.html', datas=datas, form=form)
+            return render_template('back/demandEditH5.html', data=data, form=form)
         else:
-            return render_template('back/demandEdit.html', datas=datas, form=form)
+            return render_template('back/demandEdit.html', data=data, form=form)

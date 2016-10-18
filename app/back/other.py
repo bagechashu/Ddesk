@@ -17,17 +17,17 @@ import datetime
 def remind():
     this_issue = Issue.query.get(request.args.get('id'))
     extend = eval(this_issue.extend)
-    datas = {'num': this_issue.id,  'title': this_issue.title, 'create_customer': this_issue.creator.name,
-             'create_time': this_issue.create_time.strftime("%Y-%m-%d %H:%M:%S"), 'class_id': extend['class_id']}
+    data = {'num': this_issue.id,  'title': this_issue.title, 'create_customer': this_issue.creator.name,
+            'create_time': this_issue.create_time.strftime("%Y-%m-%d %H:%M:%S"), 'class_id': extend['class_id']}
     if current_user.super_admin:
         if request.args.get('c') == 'q':
             url = 'http://chanpin.xinlonghang.cn/back/question/edit?id=' + str(this_issue.id) + '&type=html5'
-            ding.msg(category=4, url=url, data=datas)
+            ding.msg(category=4, url=url, data=data)
             flash('已发出夺命叩。', 'is-success')
             return redirect(url_for('.question'))
         else:
             url = 'http://chanpin.xinlonghang.cn/back/demand/edit?id=' + str(this_issue.id) + '&type=html5' + '&class=' + str(extend['class_id'])
-            ding.msg(category=4, url=url, data=datas)
+            ding.msg(category=4, url=url, data=data)
             flash('已发出夺命叩。', 'is-success')
             return redirect(url_for('.demand'))
     else:

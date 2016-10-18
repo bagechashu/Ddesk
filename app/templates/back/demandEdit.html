@@ -54,7 +54,7 @@
                 <p class="control">
                     {{ form.design_done_time(class="input") }}
                 </p>
-                {% if datas.class_id != 2 %}
+                {% if data.class_id != 2 %}
                 {{ form.online_time.label(class="label") }}
                 <p class="control">
                     {{ form.online_time(class="input") }}
@@ -75,57 +75,57 @@
             <div class="column is-5">
                 <label class="label">流水号</label>
                 <p class="control">
-                    {{ datas.id }}
+                    {{ data.id }}
                 </p>
                 <label class="label">发起时间</label>
                 <p class="control">
-                    {{ datas.create_time }}
+                    {{ data.create_time }}
                 </p>
                 <label class="label">发起人</label>
                 <p class="control">
-                    {{ datas.creator.name }}({{ datas.creator.tel }})
+                    {{ data.creator.name }}({{ data.creator.tel }})
                 </p>
-                {% if datas.class_id == 2 %}
+                {% if data.class_id == 2 %}
                 <label class="label">支持内容</label>
                 <p class="control">
-                    {{ datas.support }}
+                    {{ data.support }}
                 </p>
                 <label class="label">设计类型</label>
                 <p class="control">
-                    {{ datas.des_type_name }}
+                    {{ data.des_type_name }}
                 </p>
                 {% else %}
                 <label class="label">需求受众</label>
                 <p class="control">
-                    {{ datas.audience_name }}
+                    {{ data.audience_name }}
                 </p>
                 <label class="label">需求来源</label>
                 <p class="control">
-                    {{ datas.source }}
+                    {{ data.source }}
                 </p>
                 <label class="label">需求类型</label>
                 <p class="control">
-                    {{ datas.type }}
+                    {{ data.type }}
                 </p>
                 <label class="label">针对产品线或业务</label>
                 <p class="control">
-                    {{ datas.category }}
+                    {{ data.category }}
                 </p>
                 {% endif %}
                 <label class="label">概述</label>
                 <p class="control">
-                    {{ datas.title }}
+                    {{ data.title }}
                 </p>
                 <label class="label">补充说明</label>
                 <p class="control">
-                    {{ datas.details|safe }}
+                    {{ data.details|safe }}
                 </p>
             </div>
         </div>
         </section>
     </div>
 
-    {% include '_footer.html' %}
+    {% include 'front/_footer.html' %}
 
     <!--Import jQuery-->
     <script type="text/javascript" src="../../static/back/node_modules/jquery/dist/jquery.min.js"></script>

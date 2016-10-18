@@ -26,7 +26,7 @@ def question():
             all_question = Issue.query.filter(Issue.status != 30).all()
         else:
             all_question = Issue.query.filter(Issue.status != 30, Issue.assignee_id == current_user.id).all()
-    datas = []
+    data = []
     for item in all_question:
         extend = eval(item.extend)
         this_category_name = '没有指定'
@@ -40,8 +40,8 @@ def question():
                          'category_name': this_category_name, 'create_time': item.create_time,
                          'creator': {'name': item.creator.name, 'tel': item.creator.tel},
                          'assignee': {'name': assignee_name}}
-            datas.append(item_dict)
-    return render_template('back/question.html', datas=datas, status_code=status_code)
+            data.append(item_dict)
+    return render_template('back/question.html', data=data, status_code=status_code)
 
 
 @back.route('/question/edit', methods=['GET', 'POST'])
@@ -55,7 +55,7 @@ def edit_question():
         if category_id:
             this_category = Category.query.get(category_id)
             this_category_name = this_category.name
-    datas = {'id': this_issue.id, 'status': config.ISSUE_STATUS[this_issue.status], 'title': this_issue.title,
+    data = {'id': this_issue.id, 'status': config.ISSUE_STATUS[this_issue.status], 'title': this_issue.title,
              'creator': {'name': this_issue.creator.name, 'tel': this_issue.creator.tel},
              'category_name': this_category_name, 'create_time': this_issue.create_time, 'details': this_issue.details}
     form = QuestionIssueForm(feedback=this_issue.feedback, status=this_issue.status, title=this_issue.title)
@@ -93,6 +93,6 @@ def edit_question():
         if request.args.get('type') != 'html5':
             return redirect(url_for('.question'))
     if request.args.get('type') == 'html5':
-        return render_template('back/questionEditH5.html', datas=datas, form=form)
+        return render_template('back/questionEditH5.html', data=data, form=form)
     else:
-        return render_template('back/questionEdit.html', datas=datas, form=form)
+        return render_template('back/questionEdit.html', data=data, form=form)

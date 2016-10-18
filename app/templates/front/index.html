@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!--Import Icon Font-->
+    <link href="../../static/front/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="../../static/node_modules/bulma/css/bulma.css"
+          media="screen,projection"/>
+    <!--Import common.css-->
+    <link href="../../static/front/styles/common.min.css" rel="stylesheet">
+    <!-- Simditor -->
+    <link href="../../static/front/node_modules/simditor/styles/simditor.css" rel="stylesheet" type="text/css">
+    <!--Import favicon-->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title>{{ web_title }} | {{ web_subtitle }}</title>
+</head>
+
+<body>
+{% include 'front/_header.html' %}
+
+<section class="section">
+    <div class="container">
+        <article class="message is-warning">
+          <div class="message-header">
+            通知
+          </div>
+          <div class="message-body">
+            <div class="content">{{ notice|safe }}</div>
+          </div>
+        </article>
+        <div class="columns">
+            <div class="column is-3 ">
+                <article class="message is-info">
+                  <div class="message-header">
+                    资料/手册下载
+                  </div>
+                  <div class="message-body">
+                    {{ info|safe }}
+                  </div>
+                </article>
+            </div>
+            <div class="column is-3 ">
+                <article class="message is-info">
+                  <div class="message-header">
+                    视频下载
+                  </div>
+                  <div class="message-body">
+                    {{ video|safe }}
+                  </div>
+                </article>
+            </div>
+            <div class="column is-6 ">
+                <article class="message is-info">
+                  <div class="message-header">
+                    小贴士
+                  </div>
+                  <div class="message-body">
+                    {{ tips|safe }}
+                  </div>
+                </article>
+            </div>
+        </div>
+        <article class="message">
+          <div class="message-body">
+            <div class="content">{{ memo|safe }}</div>
+          </div>
+        </article>
+    </div>
+</section>
+
+{% include 'front/_footer.html' %}
+
+<!--Import jQuery-->
+<script type="text/javascript" src="../../static/front/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../../static/front/scripts/common.min.js" charset="utf-8"></script>
+
+
+</body>
+
+</html>

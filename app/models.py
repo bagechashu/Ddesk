@@ -4,16 +4,10 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
-
-
-
-
-
-
 class Version(db.Model):
     __tablename__ = 'version'
     id = db.Column(db.Integer, primary_key=True)
-    pro_line = db.Column(db.Integer, db.ForeignKey('tag.id'))  # 产品线
+    pro_line = db.Column(db.Integer, db.ForeignKey('tags.id'))  # 产品线
     num = db.Column(db.String(10))  # 版本号
     is_new = db.Column(db.Boolean, default=False)  # 是否最新版本
     is_pre = db.Column(db.Boolean, default=False)  # 是否预告版本
@@ -24,30 +18,7 @@ class Version(db.Model):
         return "<Version '{:s}>".format(self.num)
 
 
-class Category(db.Model):
-    __tablename__ = 'category'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(10))  # 类目名
-    parents = db.relationship('Category', uselist=False, remote_side=id)  # 上级分类对象
-    parents_id = db.Column(db.Integer, db.ForeignKey('category.id'))  # 上级分类ID
-    sequence = db.Column(db.Integer, default=1)  # 排序:小数靠前,大数靠后
-    tag = db.relationship('Tag', backref='category')  # 分类下tags
 
-    def __repr__(self):
-        return "<Category '{:s}>".format(self.name)
-
-
-class Tag(db.Model):
-    __tablename__ = 'tag'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30))  # tag名
-    sequence = db.Column(db.Integer, default=0)  # 排序:小数靠前,大数靠后
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))  # 所属分类ID
-    version = db.relationship('Version', backref='tag')  # tag下所属版本
-    status = db.Column(db.Boolean, default=1)  # 启用/弃用
-
-    def __repr__(self):
-        return "<Tag '{:s}>".format(self.name)
 
 
 
@@ -143,7 +114,7 @@ class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(20))  # 文章标题
     details = db.Column(db.Text)  # 正文
-    tag_id = db.Column(db.Text, default='[]')  # 文章Tags
+    tag_id = db.Column(db.Text, default=[])  # 文章Tags
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))  # 作者
     status = db.Column(db.Boolean, default=False)  # 账号状态:草稿 / 发布
     create_time = db.Column(db.DateTime, default=datetime.now)  # 文章发布时间
@@ -151,3 +122,45 @@ class Article(db.Model):
 
     def __repr__(self):
         return "<Article '{:s}>".format(self.title)
+
+
+# 版本里程碑
+class Milestone(db.Model):
+    __tablename__ = 'milestones'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(32))  # 标题
+    details = db.Column(db.Text)  # 详情
+    product_id = db.Column(db.Integer, db.ForeignKey('tags.id'))  # 关联产品
+    publish_time = db.Column(db.DateTime)  # 版本发布时间
+
+    def __repr__(self):
+        return "<Milestone '{:s}>".format(self.title)
+
+
+# 分类
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(10))  # 类目名
+    parents = db.relationship('Category', uselist=False, remote_side=id)  # 上级分类对象
+    parents_id = db.Column(db.Integer, db.ForeignKey('categories.id'))  # 上级分类ID
+    sequence = db.Column(db.Integer, default=1)  # 排序:小数靠前,大数靠后
+    tags = db.relationship('Tag', backref='category')  # 分类下tags
+
+    def __repr__(self):
+        return "<Category '{:s}>".format(self.name)
+
+
+# Tags
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))  # tag名
+    sequence = db.Column(db.Integer, default=0)  # 排序:小数靠前,大数靠后
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))  # 所属分类ID
+    version = db.relationship('Version', backref='tag')  # tag下所属版本
+    milestones = db.relationship('Milestone', backref='tags')  # 产品下的所有里程碑
+    status = db.Column(db.Boolean, default=1)  # 启用/弃用
+
+    def __repr__(self):
+        return "<Tag '{:s}>".format(self.name)

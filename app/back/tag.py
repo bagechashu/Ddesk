@@ -1,39 +1,42 @@
 # -*- coding: utf-8 -*-
-from . import admin
-from app.forms import AdminTagForm
+"""
+__author__ = 'Zhipeng Du'
+__mtime__ = '2016/10/18' '18:35'
+"""
+from . import back
+from ..forms import TagForm
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from ..models import db, Tag, Category
 
 
-@admin.route('/tag')
+@back.route('/tag')
 @login_required
 def tag():
-    status = request.args.get('status')
-    all_tags = Tag.query.filter_by(status=status).all()
-    return render_template('admin/tag.html', all_tags=all_tags, status=status)
+    all_tags = Tag.query.filter_by(status=True).order_by(Tag.id.desc()).all()
+    return render_template('back/tag.html', all_tags=all_tags)
 
 
-@admin.route('/tag/add', methods=['GET', 'POST'])
+@back.route('/tag/add', methods=['GET', 'POST'])
 @login_required
 def add_tag():
-    form = AdminTagForm()
+    form = TagForm()
     all_category = Category.query.all()
     form.category_id.choices = [(category.id, category.name) for category in all_category]
     if form.validate_on_submit():
         new_tag = Tag(name=form.name.data, sequence=form.sequence.data, category_id=form.category_id.data)
         db.session.add(new_tag)
         db.session.commit()
-        flash('添加Tag成功。', 'alert-success')
+        flash('添加Tag成功。', 'is-success')
         return redirect(url_for('.tag', status=1))
-    return render_template('admin/tag-add.html', form=form)
+    return render_template('back/tagAdd.html', form=form)
 
 
-@admin.route('/tag/edit', methods=['GET', 'POST'])
+@back.route('/tag/edit', methods=['GET', 'POST'])
 @login_required
 def edit_tag():
     old_tag = Tag.query.get_or_404(request.args.get('tag_id'))
-    form = AdminTagForm(name=old_tag.name, sequence=old_tag.sequence)
+    form = TagForm(name=old_tag.name, sequence=old_tag.sequence)
     all_category = Category.query.all()
     form.category_id.choices = [(category.id, category.name) for category in all_category]
     form.category_id.choices.remove((old_tag.category.id, old_tag.category.name))
@@ -44,12 +47,12 @@ def edit_tag():
         old_tag.category_id = form.category_id.data
         db.session.add(old_tag)
         db.session.commit()
-        flash('Tag信息已更新', 'alert-success')
+        flash('Tag信息已更新', 'is-success')
         return redirect(url_for('.tag', status=1))
-    return render_template('admin/tag-edit.html', form=form)
+    return render_template('back/tagEdit.html', form=form)
 
 
-@admin.route('/tag/status')
+@back.route('/tag/status')
 @login_required
 def status_tag():
     old_tag = Tag.query.get_or_404(request.args.get('tag_id'))
@@ -59,5 +62,5 @@ def status_tag():
         old_tag.status = True
     db.session.add(old_tag)
     db.session.commit()
-    flash('Tag状态已更新', 'alert-success')
+    flash('Tag状态已更新', 'is-success')
     return redirect(url_for('.tag', status=1))

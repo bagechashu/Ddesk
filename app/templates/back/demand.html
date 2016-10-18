@@ -48,7 +48,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in datas %}
+                    {% for item in data %}
                     <tr>
                         <td>{{ item.id }}</td>
                         <td>{{ item.create_time }}</td>
@@ -71,7 +71,7 @@
         </section>
     </div>
 
-    {% include '_footer.html' %}
+    {% include 'front/_footer.html' %}
 
     <!--Import jQuery-->
     <script type="text/javascript" src="../../static/back/node_modules/jquery/dist/jquery.min.js"></script>

@@ -19,7 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
     <meta name="format-detection" content="telephone=no"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <title>{{ this_page.title }} | {{ web_subtitle }}</title>
+    <title>{{ web_subtitle }}</title>
 </head>
 
 <body>
@@ -28,11 +28,10 @@
 <section class="section">
     <div class="container page-wrapper">
         <div class="page-title has-text-centered">
-            <h3 class="title">{{ this_page.title }}</h3>
-            <p class="help">最近更新于：{{ this_page.modify_time }}</p>
-        </div>
-        <div class="content">
-            {{ this_page.details|safe }}
+            <h3 class="title">您提交的反馈我们已收到。</h3>
+            <p class="help">您提交的反馈已成功递交到系统中，产品组会按递交反馈的先后顺序去确认，一般3工作日内会有回复。</p>
+            <p> ~ </p>
+            <a href="{{ url_for('.index') }}">返回首页</a>
         </div>
     </div>
 </section>

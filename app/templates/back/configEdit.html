@@ -25,7 +25,7 @@
     <div class="main">
         <div class="is-clearfix">
             <h3 class="title is-pulled-left">网站设置</h3>
-            <a class="button is-small t-b" href="{{ url_for('admin.index') }}">返回</a>
+            <a class="button is-small t-b" href="{{ url_for('.index') }}">返回</a>
         </div>
         <section class="section">
             <div class="columns">
@@ -50,7 +50,7 @@
         </section>
     </div>
 
-    {% include '_footer.html' %}
+    {% include 'front/_footer.html' %}
 
     <!--Import jQuery-->
     <script type="text/javascript" src="../../static/back/node_modules/jquery/dist/jquery.min.js"></script>

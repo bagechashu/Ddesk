@@ -40,9 +40,7 @@ def load_user(user_id):
 
 
 from .front import front
-from .admin import admin
 from .back import back
 app.register_blueprint(front)
-app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(back, url_prefix='/back')
 

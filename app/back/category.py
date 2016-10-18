@@ -1,23 +1,27 @@
 # -*- coding: utf-8 -*-
-from . import admin
-from app.forms import AdminCategoryForm
+"""
+__author__ = 'Zhipeng Du'
+__mtime__ = '2016/10/18' '18:11'
+"""
+from . import back
+from ..forms import CategoryForm
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required
+from ..models import Category
 
 
-@admin.route('/category')
+@back.route('/category')
 @login_required
 def category():
-    from ..models import Category
-    all_category = Category.query.all()
-    return render_template('admin/category.html', all_category=all_category, Category=Category)
+    all_category = Category.query.order_by(Category.id.desc()).all()
+    return render_template('back/category.html', all_category=all_category, Category=Category)
 
 
-@admin.route('/category/add', methods=['GET', 'POST'])
+@back.route('/category/add', methods=['GET', 'POST'])
 @login_required
 def add_category():
     from ..models import db, Category
-    form = AdminCategoryForm()
+    form = CategoryForm()
     all_top_category = Category.query.filter_by(parents_id=None).all()
     form.parents_id.choices = [(category.id, category.name) for category in all_top_category]
     form.parents_id.choices.insert(0, (0, '顶级分类'))
@@ -28,17 +32,17 @@ def add_category():
             new_category = Category(name=form.name.data, sequence=form.sequence.data, parents_id=form.parents_id.data)
         db.session.add(new_category)
         db.session.commit()
-        flash('新分类已添加。', 'alert-success')
+        flash('新分类已添加。', 'is-success')
         return redirect(url_for('.category'))
-    return render_template('admin/category-add.html', form=form)
+    return render_template('back/categoryAdd.html', form=form)
 
 
-@admin.route('/category/edit', methods=['GET', 'POST'])
+@back.route('/category/edit', methods=['GET', 'POST'])
 @login_required
 def edit_category():
     from ..models import db, Category
     old_category = Category.query.get_or_404(request.args.get('category_id'))
-    form = AdminCategoryForm(name=old_category.name, sequence=old_category.sequence)
+    form = CategoryForm(name=old_category.name, sequence=old_category.sequence)
     all_top_category = Category.query.filter_by(parents_id=None).all()
     # 查询当前分类是否已有子分类,如果有,不允许设置上级分类
     if Category.query.filter_by(parents_id=old_category.id).first() is None:
@@ -63,6 +67,6 @@ def edit_category():
             old_category.parents_id = None
         db.session.add(old_category)
         db.session.commit()
-        flash('分类信息已更新。', 'alert-success')
+        flash('分类信息已更新。', 'is-success')
         return redirect(url_for('.category'))
-    return render_template('admin/category-edit.html', form=form)
+    return render_template('back/categoryEdit.html', form=form)

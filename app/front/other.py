@@ -27,8 +27,11 @@ from datetime import datetime
 
 @front.route('/commit/success')
 def commit_success():
-    web_title = Config.query.filter_by(key='title').first()
-    return render_template('commit.html', web_title=web_title)
+    old_title = Config.query.filter_by(key='title').first()
+    old_subtitle = Config.query.filter_by(key='subtitle').first()
+    web_title = old_title.value if old_title else ''
+    web_subtitle = old_subtitle.value if old_subtitle else ''
+    return render_template('front/success.html', web_title=web_title, web_subtitle=web_subtitle)
 
 
 # 直接传图接口

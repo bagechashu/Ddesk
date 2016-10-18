@@ -11,6 +11,10 @@
     <link href="../../static/back/node_modules/metismenu/dist/metisMenu.min.css" rel="stylesheet">
     <!-- Simditor -->
     <link href="../../static/back/node_modules/simditor/styles/simditor.css" rel="stylesheet" type="text/css">
+    <!-- Chosen -->
+    <link href="../../static/back/node_modules/chosen-js/chosen.css" rel="stylesheet" type="text/css">
+    <!-- datetimepicker CSS -->
+    <link href="../../static/back/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css" >
     <!--Import common.css-->
     <link href="../../static/back/styles/common.min.css" rel="stylesheet">
 
@@ -26,8 +30,8 @@
 
     <div class="main">
         <div class="is-clearfix">
-            <h3 class="title is-pulled-left">编辑文章</h3>
-            <a class="button is-small t-b" href="{{ url_for('.article') }}">返回</a>
+            <h3 class="title is-pulled-left">新增里程碑</h3>
+            <a class="button is-small t-b" href="{{ url_for('.milestone') }}">返回</a>
         </div>
         <section class="section">
         <div class="columns">
@@ -36,26 +40,21 @@
                 {% include 'front/_formMsg.html' %}
                 {{ form.hidden_tag() }}
 
+                {{ form.product.label(class="label") }}
+                <p class="control">
+                    {{ form.product(class="input") }}
+                </p>
                 {{ form.title.label(class="label") }}
                 <p class="control">
-                    {{ form.title(class="input", placeholder="标题") }}
+                    {{ form.title(class="input") }}
                 </p>
                 {{ form.details.label(class="label") }}
                 <p class="control">
                     {{ form.details(class="textarea", placeholder="文章正文") }}
                 </p>
-                {{ form.tag_id.label(class="label") }}
-                 <p class="control">
-                    <span class="select">
-                    {{ form.tag_id() }}
-                    </span>
-                </p>
-                <label class="label">是否正式发布(前台可见)</label>
+                {{ form.publish_time.label(class="label") }}
                 <p class="control">
-                  <label class="checkbox">
-                    {{ form.status }}
-                    {{ form.status.label }}
-                  </label>
+                    {{ form.publish_time(class="input") }}
                 </p>
                 <div class="submit">
                     <button class="button is-dark" type="submit">保存</button>
@@ -94,6 +93,26 @@
                 fileKey:'detail_img'
             },
             imageButton:['upload']
+        });
+    </script>
+    <!-- Chosen -->
+    <script type="text/javascript" src="../../static/back/node_modules/chosen-js/chosen.jquery.js"></script>
+    <script>
+        $("#product").chosen({
+            no_results_text: "没有匹配的Tag：",
+            placeholder_text_multiple:'请输入关键词选择Tag'
+        })
+    </script>
+    <!-- datetimepicker JavaScript -->
+    <script src="../../static/back/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
+    <script>
+        $('#publish_time').datetimepicker({
+              lang:"ch",           //语言选择中文
+              format:"Y-m-d",      //格式化日期
+              timepicker: false,    //关闭时间选项
+              yearStart: 2016,     //设置最小年份
+              yearEnd: 2050,        //设置最大年份
+              todayButton: false    //关闭选择今天按钮
         });
     </script>
 </body>

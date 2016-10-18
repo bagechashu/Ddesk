@@ -64,3 +64,12 @@ form .submit {
 .page-title{
     margin-bottom: 30px;
 }
+
+/* Milestone */
+.mile-main{
+    max-width: 800px;
+    margin: 0 auto;
+}
+.mile-details-wrapper{
+    margin: 30px auto;
+}

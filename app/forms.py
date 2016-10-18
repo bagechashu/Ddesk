@@ -5,44 +5,6 @@ from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, E
 from wtforms_components import SelectField as SelectField2, SelectMultipleField
 
 
-
-
-# 版本发布
-class AdminVersionForm(Form):
-    pro_line = SelectField2('产品线', validators=[DataRequired('产品线必填！')], coerce=int)
-    num = StringField('版本号', validators=[DataRequired('版本号必填!')])
-    details = TextAreaField('更新详情', validators=[DataRequired('更新详情必填。')])
-    pub_time = DateTimeField('发布时间', validators=[DataRequired('发布时间必填。')],  format='%Y-%m-%d')
-    is_pre = BooleanField('是预告版本')
-    is_new = BooleanField('是最新版本')
-    submit = SubmitField('保存')
-
-
-# 添加分类
-class AdminCategoryForm(Form):
-    name = StringField('分类名', validators=[DataRequired('分类名必填哟！')])
-    sequence = IntegerField('序号', validators=[DataRequired('序号必填！')])
-    parents_id = SelectField('上级分类', coerce=int)
-    submit = SubmitField('保存')
-
-
-# 添加tag
-class AdminTagForm(Form):
-    name = StringField('Tag名', validators=[DataRequired('Tag名必填哟！')])
-    sequence = IntegerField('排序', validators=[DataRequired('排序必填')])
-    category_id = SelectField('所属分类', validators=[DataRequired('所属分类必须指定。')], coerce=int)
-    submit = SubmitField('保存')
-
-
-
-
-
-"""
-V1.0
-新版本重新设计表单
-"""
-
-
 # 网站基本信息配置
 class AppConfigForm(Form):
     title = StringField('网站标题', validators=[DataRequired('网站标题不能为空。')])
@@ -113,7 +75,7 @@ class DesignDemandForm(Form):
 # 处理需求类工单
 class DemandIssueForm(Form):
     title = StringField('概述', validators=[DataRequired('概述必填。')])
-    design_done_time = StringField('预计设计完成时间', validators=[DataRequired('预计设计完成时间必须给出。')])
+    design_done_time = StringField('预计设计完成时间')
     online_time = StringField('预计发版上线时间')
     feedback = TextAreaField('反馈内容')
     status = SelectField('当前处理进度', validators=[DataRequired('处理进度必选。')],
@@ -130,10 +92,36 @@ class AdminLoginForm(Form):
     submit = SubmitField('')
 
 
-# 添加文章
+# 添加、编辑文章
 class ArticleForm(Form):
     title = StringField('标题', validators=[DataRequired('标题必填。')])
     details = TextAreaField('正文', validators=[DataRequired('正文必填。')])
     tag_id = SelectField('所属Tag', validators=[DataRequired('所属Tag必须指定。')], coerce=int)
     status = BooleanField('正式发布')
     submit = SubmitField('保存')
+
+
+# 添加、编辑里程碑
+class MilestoneForm(Form):
+    product = SelectField2('关联产品', validators=[DataRequired('关联产品必选！')], coerce=int)
+    title = StringField('标题', validators=[DataRequired('标题必填!')])
+    details = TextAreaField('详情', validators=[DataRequired('详情必填。')])
+    publish_time = DateTimeField('发布时间', validators=[DataRequired('发布时间必填。')],  format='%Y-%m-%d')
+    submit = SubmitField('保存')
+
+
+# 添加分类
+class CategoryForm(Form):
+    name = StringField('分类名', validators=[DataRequired('分类名必填哟！')])
+    sequence = IntegerField('序号', validators=[DataRequired('序号必填！')])
+    parents_id = SelectField('上级分类', coerce=int)
+    submit = SubmitField('保存')
+
+
+# 添加tag
+class TagForm(Form):
+    name = StringField('Tag名', validators=[DataRequired('Tag名必填哟！')])
+    sequence = IntegerField('排序', validators=[DataRequired('排序必填')])
+    category_id = SelectField('所属分类', validators=[DataRequired('所属分类必须指定。')], coerce=int)
+    submit = SubmitField('保存')
+

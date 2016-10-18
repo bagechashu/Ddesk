@@ -15,8 +15,9 @@ from datetime import datetime
 @login_required
 def article():
     all_article = Article.query.order_by(Article.modify_time.desc()).all()
-    datas = []
+    data = []
     for item in all_article:
+
         author = User.query.get(item.author_id)
         tags = []
         for tag_id in eval(item.tag_id):
@@ -24,8 +25,8 @@ def article():
             tags.append(tag.name)
         item_dict = {'id': item.id, 'title': item.title, 'details': item.details, 'tags': tags,
                      'create_time': item.create_time, 'modify_time': item.modify_time, 'author': author.name}
-        datas.append(item_dict)
-    return render_template('back/article.html', datas=datas)
+        data.append(item_dict)
+    return render_template('back/article.html', data=data)
 
 
 @back.route('/article/add', methods=['GET', 'POST'])
@@ -35,12 +36,12 @@ def add_article():
     all_tag = Tag.query.all()
     form.tag_id.choices = [(tag.id, tag.name) for tag in all_tag]
     if form.validate_on_submit():
-        new_article = Article(title=form.title.data, details=form.details.data, tag_id='[form.tag_id.data]',
+        new_article = Article(title=form.title.data, details=form.details.data, tag_id=str([form.tag_id.data]),
                               author_id=current_user.id)
         db.session.add(new_article)
         db.session.commit()
         flash('文章草稿已成功保存。', 'is-success')
-        return redirect(url_for('.edit_article', id=new_article.id))
+        return redirect(url_for('.article'))
     return render_template('back/articleAdd.html', form=form)
 
 

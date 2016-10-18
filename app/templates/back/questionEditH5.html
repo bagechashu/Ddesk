@@ -33,27 +33,27 @@
             <div class="column is-half">
                 <label class="label">流水号</label>
                 <p class="control">
-                    {{ datas.id }}
+                    {{ data.id }}
                 </p>
                 <label class="label">发起时间</label>
                 <p class="control">
-                    {{ datas.create_time }}
+                    {{ data.create_time }}
                 </p>
                 <label class="label">发起人</label>
                 <p class="control">
-                    {{ datas.creator.name }}({{ datas.creator.tel }})
+                    {{ data.creator.name }}({{ data.creator.tel }})
                 </p>
                 <label class="label">针对产品线或业务</label>
                 <p class="control">
-                    {{ datas.category_name }}
+                    {{ data.category_name }}
                 </p>
                 <label class="label">概述</label>
                 <p class="control">
-                    {{ datas.title }}
+                    {{ data.title }}
                 </p>
                 <label class="label">详情</label>
                 <p class="control">
-                    {{ datas.details|safe }}
+                    {{ data.details|safe }}
                 </p>
             </div>
             <form class="column is-half" action="" method="post">
@@ -88,7 +88,7 @@
         </section>
     </div>
 
-    {% include '_footer.html' %}
+    {% include 'front/_footer.html' %}
 
     <!--Import jQuery-->
     <script type="text/javascript" src="../../static/back/node_modules/jquery/dist/jquery.min.js"></script>
