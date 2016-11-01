@@ -4,10 +4,10 @@
   "description": "Ddesk",
   "main": "index.js",
   "dependencies": {
-    "bulma": "^0.1.0",
-    "clipboard": "^1.5.12",
+    "bulma": "^0.2.3",
+    "clipboard": "^1.5.13",
     "font-awesome": "^4.6.3",
-    "jquery": "^3.1.0",
+    "jquery": "^3.1.1",
     "metismenu": "^2.5.2",
     "simditor": "^2.3.6"
   },

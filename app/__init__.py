@@ -5,11 +5,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from app.modules import dingtalk, alidayu
-import upyun
+import os
+
 
 app = Flask(__name__)
 config = load_config()
 app.config.from_object(config)
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads/')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -26,10 +30,6 @@ ding = dingtalk.DingTalk(config.DINGTALK_API_CID, config.DINGTALK_API_SECRET, co
 # 阿里大鱼短信
 alidayu = alidayu.RestApi(key=config.TAOBAO_API_KEY, secret=config.TAOBAO_API_SECRET, sms_free_sign_name='一融需求系统',
                           url='https://eco.taobao.com/router/rest')
-
-
-# 又拍云
-up = upyun.UpYun(config.UPYUN_BUCKET, username=config.UPYUN_USERNAME, password=config.UPYUN_PASSWORD)
 
 
 # login回调函数

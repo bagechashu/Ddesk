@@ -50,7 +50,8 @@ target/
 # Static
 .bowerrc
 .npmignore
+*.sassc
+*.sass
 
 # Other
 migrations/
-node_modules/

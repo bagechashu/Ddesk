@@ -17,12 +17,14 @@ __mtime__ = '16/8/11'
                   ┃┫┫  ┃┫┫
                   ┗┻┛  ┗┻┛
 """
-from app import app, config, up
+from app import app, config
 from . import front
-from flask import render_template, request, send_from_directory
+from flask import render_template, request, send_from_directory, url_for
 from ..models import Config
 import json
-from datetime import datetime
+import time
+from werkzeug.utils import secure_filename
+import os
 
 
 @front.route('/commit/success')
@@ -34,16 +36,29 @@ def commit_success():
     return render_template('front/success.html', web_title=web_title, web_subtitle=web_subtitle)
 
 
-# 直接传图接口
-@front.route('/upload/upyun', methods=['POST'])
-def upyun():
-    time = datetime.now()
-    time_now = str(time.time())
-    data = request.files['detail_img']
-    key = '/easyrong/' + str(time.year) + '/' + str(time.month) + '/' + str(time.day) + '/' + time_now
-    res = up.put(key, data)
-    if res['file-type']:
-        return_info = {"success": "true", "file_path": config.UPYUN_DOMAIN + key + "_600px"}
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in config.ALLOWED_EXTENSIONS
+
+
+# 文件下载接口
+@front.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
+
+# 文件接口
+@front.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['detail_img']
+    path = app.config['UPLOAD_FOLDER']
+    if file and allowed_file(file.filename):
+        filename = str(time.time()) + secure_filename(file.filename)
+        path = os.path.join(path, filename)
+        file.save(path)
+        print()
+    return_info = {"success": "true", "file_path": url_for('.uploaded_file', filename=filename)}
     return json.dumps(return_info)
 
 
