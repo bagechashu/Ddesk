@@ -10,6 +10,7 @@ from ..models import db, User, Tag, Issue, Category
 from app import config, alidayu
 from ..forms import DemandIssueForm
 from datetime import datetime
+from app.modules import remind
 
 
 @back.route('/demand')
@@ -44,6 +45,7 @@ def demand():
 @back.route('/demand/edit', methods=['GET', 'POST'])
 @login_required
 def edit_demand():
+    remind.time_out_and_no_assignee()
     this_issue = Issue.query.get_or_404(request.args.get('id'))
     all_admin = User.query.filter_by(admin=True).all()
     extend = eval(this_issue.extend)

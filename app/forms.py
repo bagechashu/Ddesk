@@ -45,7 +45,7 @@ class QuestionIssueForm(Form):
     title = StringField('概述', validators=[DataRequired('概述必填。')])
     feedback = TextAreaField('反馈内容', validators=[DataRequired('反馈内容必填。')])
     status = SelectField('当前处理进度', validators=[DataRequired('当前处理进度必选。')], choices=[(0, '请选择'), (10, '待处理'),
-                                                                                (20, '处理中'), (30, '处理完毕')], coerce=int)
+                                                                                (20, '处理中'), (30, '完结（处理完毕）')], coerce=int)
     assignee = SelectField('负责人', validators=[DataRequired('负责人必须指定。')], coerce=int)
     submit = SubmitField('更新')
 
@@ -79,7 +79,7 @@ class DemandIssueForm(Form):
     online_time = StringField('预计发版上线时间')
     feedback = TextAreaField('反馈内容')
     status = SelectField('当前处理进度', validators=[DataRequired('处理进度必选。')],
-                         choices=[(0, '请选择'), (10, '待处理'), (20, '处理中'), (30, '处理完毕')], coerce=int)
+                         choices=[(0, '请选择'), (10, '待处理'), (20, '处理中'), (30, '完结(已上线）'), (40, '不予处理')], coerce=int)
     assignee = SelectField('需求当前负责人', validators=[DataRequired('负责人必须指定。')], coerce=int)
     submit = SubmitField('更新')
 
