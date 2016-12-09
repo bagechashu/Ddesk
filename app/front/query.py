@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from . import front
-from flask import render_template, request
+from flask import render_template, request, flash, redirect, url_for
 from app import config
 from flask_login import current_user, login_required
-from ..models import Config, Issue
+from ..models import db, Config, Issue
+from ..forms import IssueEvaluateForm
 
 
 @front.route('/query')
@@ -18,9 +19,10 @@ def query():
                            status=request.args.get('status'))
 
 
-@front.route('/query/details')
+@front.route('/query/details', methods=['GET', 'POST'])
 @login_required
 def query_details():
+    form = IssueEvaluateForm()
     old_title = Config.query.filter_by(key='title').first()
     old_subtitle = Config.query.filter_by(key='subtitle').first()
     web_title = old_title.value if old_title else ''
@@ -28,5 +30,14 @@ def query_details():
     this_issue = Issue.query.get(request.args.get('id'))
     logs = eval(this_issue.log)
     extend = eval(this_issue.extend)
+    if this_issue.status == 30:
+        if form.validate_on_submit():
+            extend['evaluate'] = {'evaluate': form.evaluate.data, 'details': form.details.data}
+            this_issue.extend = str(extend)
+            this_issue.status = 31
+            db.session.add(this_issue)
+            db.session.commit()
+            flash('感谢您的评价。', 'is-success')
+            return redirect(url_for('.query_details', id=this_issue.id))
     return render_template('front/queryDetails.html', this_issue=this_issue, web_title=web_title,
-                           web_subtitle=web_subtitle, status=config.ISSUE_STATUS, logs=logs, extend=extend)
+                           web_subtitle=web_subtitle, status=config.ISSUE_STATUS, logs=logs, extend=extend, form=form)

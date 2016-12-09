@@ -41,7 +41,12 @@
                 </li>
                 <li {% if status == '30' %}class="is-active"{% endif %}>
                     <a href="{{ url_for('.query', status=30) }}">
-                        已完结
+                        处理完毕，待您评价
+                    </a>
+                </li>
+                <li {% if status == '31' %}class="is-active"{% endif %}>
+                    <a href="{{ url_for('.query', status=31) }}">
+                        已评价
                     </a>
                 </li>
             </ul>
@@ -66,7 +71,12 @@
                         </td>
                         <td>{{ item.create_time }}</td>
                         <td>{{ item.assignee.name }}({{ item.assignee.tel }})</td>
-                        <td><a href="{{ url_for('.query_details', id=item.id) }}" target="_blank">详情</a></td>
+                        <td>
+                            <a href="{{ url_for('.query_details', id=item.id) }}" target="_blank">详情</a>
+                            {% if status == '30' %}
+                                <a href="{{ url_for('.query_details', id=item.id) }}" target="_blank">评价</a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

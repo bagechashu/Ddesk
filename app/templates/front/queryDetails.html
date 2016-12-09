@@ -2,11 +2,12 @@
 <html lang="zh-CN">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!--Import Icon Font-->
     <link href="../../static/front/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="../../static/front/node_modules/bulma/css/bulma.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="../../static/front/node_modules/bulma/css/bulma.css"
+          media="screen,projection"/>
     <!--Import common.css-->
     <link href="../../static/front/styles/common.min.css" rel="stylesheet">
     <!-- Simditor -->
@@ -15,67 +16,105 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
     <title>{{ web_title }} - 查询进度 | {{ web_subtitle }}</title>
 </head>
 
 <body>
-    {% include 'front/_header.html' %}
+{% include 'front/_header.html' %}
 
-    <section class="section">
-        <div class="columns">
-            <div class="column is-half is-offset-one-quarter">
-                <strong>工单流水号</strong>
-                <p>{{ this_issue.id }}</p>
-                <strong>提出时间</strong>
-                <p>{{ this_issue.create_time }}</p>
-                <strong>当前处理进度</strong>
-                <p>{{ status[this_issue.status] }}</p>
-                <strong>当前负责人</strong>
-                <p>{{ this_issue.assignee.name }}（{{ this_issue.assignee.tel }}）</p>
-                <strong>您的需求或问题</strong>
-                <p class="content">
-                    {{ this_issue.title }}
-                    {{ this_issue.details|safe }}
-                </p>
-                <strong>最新反馈</strong>
-                <p class="content">
-
-                    {{ this_issue.feedback|safe }}
-                </p>
-                <strong>时间节点</strong>
-                <p>预计{{ extend.design_done_time }} 设计完成，{{ extend.online_time }}交付/上线。</p>
-                <strong>处理流程</strong>
-                <table class="table is-narrow">
-                      <thead>
-                        <tr>
-                            <th>时间</th>
-                            <th>处理人</th>
-                            <th>处理反馈</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for item in logs %}
-                        <tr>
-                            <td>{{ item.date[0: 19] }}</td>
-                            <td>{{ item.admin }}</td>
-                            <td>{{ item.data }}</td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                </table>
-            </div>
+<section class="section">
+    <div class="columns is-multiline">
+        <div class="column is-half is-offset-one-quarter">
+            <article class="message is-info">
+                <div class="message-body">
+                    {% include 'front/_flashMsg.html' %}
+                    {% include 'front/_formMsg.html' %}
+                    {% if this_issue.status == 30 %}
+                        <p class="has-text-centered">您对本次需求的处理过程满意度如何？</p>
+                        <form action="" method="post">
+                            <label class="label">评价</label>
+                            {{ form.hidden_tag() }}
+                            <p class="control">
+                                {% for subfield in form.evaluate %}
+                                    <label class="radio">
+                                        {{ subfield }}
+                                        {{ subfield.label }}
+                                    </label>
+                                {% endfor %}
+                            </p>
+                            {{ form.details.label(class="label") }}
+                            <p class="control">
+                                {{ form.details(class="textarea", placeholder="如果是中、差评，请您务必告诉我们原因，以便于我们优化工作") }}
+                            </p>
+                            <p class="control">
+                                {{ form.submit(class="button is-primary") }}
+                            </p>
+                        </form>
+                    {% elif this_issue.status == 31 %}
+                        <p class="has-text-centered">
+                            您已{% if extend.evaluate.evaluate == 1 %}好评。
+                            {% elif extend.evaluate.evaluate == 2 %}中评。
+                            {% elif extend.evaluate.evaluate == 3 %}差评。
+                            {% endif %}
+                            {{ extend.evaluate.details }}</p>
+                    {% else %}
+                        <p class="has-text-centered">工单仍在处理中，请您耐心等待...</p>
+                    {% endif %}
+                </div>
+            </article>
         </div>
-    </section>
+        <div class="column is-half is-offset-one-quarter">
+            <strong>工单流水号</strong>
+            <p>{{ this_issue.id }}</p>
+            <strong>提出时间</strong>
+            <p>{{ this_issue.create_time }}</p>
+            <strong>当前处理进度</strong>
+            <p>{{ status[this_issue.status] }}</p>
+            <strong>当前负责人</strong>
+            <p>{{ this_issue.assignee.name }}（{{ this_issue.assignee.tel }}）</p>
+            <strong>您的需求或问题</strong>
+            <p class="content">
+                {{ this_issue.title }}
+                {{ this_issue.details|safe }}
+            </p>
+            <strong>最新反馈</strong>
+            <p class="content">
 
-    {% include 'front/_footer.html' %}
+                {{ this_issue.feedback|safe }}
+            </p>
+            <strong>时间节点</strong>
+            <p>预计{{ extend.design_done_time }} 设计完成，{{ extend.online_time }}交付/上线。</p>
+            <strong>处理流程</strong>
+            <table class="table is-narrow">
+                <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>处理人</th>
+                    <th>处理反馈</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in logs %}
+                    <tr>
+                        <td>{{ item.date[0: 19] }}</td>
+                        <td>{{ item.admin }}</td>
+                        <td>{{ item.data }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
-    <!--Import jQuery-->
-    <script type="text/javascript" src="../../static/front/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../../static/front/scripts/common.min.js" charset="utf-8"></script>
+{% include 'front/_footer.html' %}
 
+<!--Import jQuery-->
+<script type="text/javascript" src="../../static/front/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../../static/front/scripts/common.min.js" charset="utf-8"></script>
 
 
 </body>

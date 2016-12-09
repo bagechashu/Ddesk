@@ -2,34 +2,36 @@
 <html lang="zh-CN">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!--Import Icon Font-->
     <link href="../../static/back/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!--Import Bulma.css-->
-    <link type="text/css" rel="stylesheet" href="../../static/back/node_modules/bulma/css/bulma.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="../../static/back/node_modules/bulma/css/bulma.css"
+          media="screen,projection"/>
     <!-- datetimepicker CSS -->
-    <link href="../../static/back/node_modules/jquery-datetimepicker/jquery.datetimepicker.css" rel="stylesheet" type="text/css" >
+    <link href="../../static/back/node_modules/jquery-datetimepicker/jquery.datetimepicker.css" rel="stylesheet"
+          type="text/css">
     <!-- MetisMenu CSS -->
     <link href="../../static/back/node_modules/metismenu/dist/metisMenu.min.css" rel="stylesheet">
     <!--Import common.css-->
     <link href="../../static/back/styles/common.min.css" rel="stylesheet">
 
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
     <title>Ddesk Control</title>
 </head>
 
 <body>
-    {% include 'back/_header.html' %}
+{% include 'back/_header.html' %}
 
-    <div class="main">
-        <div class="is-clearfix">
-            <h3 class="title is-pulled-left">处理工单</h3>
-            <a class="button is-small t-b" href="{{ url_for('.demand') }}">返回</a>
-        </div>
-        <section class="section">
+<div class="main">
+    <div class="is-clearfix">
+        <h3 class="title is-pulled-left">处理工单</h3>
+        <a class="button is-small t-b" href="{{ url_for('.demand') }}">返回</a>
+    </div>
+    <section class="section">
         <div class="columns">
             <form class="column is-5" action="" method="post">
                 {% include 'front/_flashMsg.html' %}
@@ -55,10 +57,10 @@
                     {{ form.design_done_time(class="input") }}
                 </p>
                 {% if data.class_id != 2 %}
-                {{ form.online_time.label(class="label") }}
-                <p class="control">
-                    {{ form.online_time(class="input") }}
-                </p>
+                    {{ form.online_time.label(class="label") }}
+                    <p class="control">
+                        {{ form.online_time(class="input") }}
+                    </p>
                 {% endif %}
                 {{ form.status.label(class="label") }}
                 <p class="control">
@@ -76,6 +78,13 @@
                 <label class="label">流水号</label>
                 <p class="control">
                     {{ data.id }}
+                    <span class="tag is-info">
+                    {% if data.evaluate.evaluate == 1 %}好评。
+                    {% elif data.evaluate.evaluate == 2 %}中评。
+                    {% elif data.evaluate.evaluate == 3 %}差评。
+                    {% endif %}
+                        {{ data.evaluate.details }}
+                </span>
                 </p>
                 <label class="label">发起时间</label>
                 <p class="control">
@@ -86,31 +95,31 @@
                     {{ data.creator.name }}({{ data.creator.tel }})
                 </p>
                 {% if data.class_id == 2 %}
-                <label class="label">支持内容</label>
-                <p class="control">
-                    {{ data.support }}
-                </p>
-                <label class="label">设计类型</label>
-                <p class="control">
-                    {{ data.des_type_name }}
-                </p>
+                    <label class="label">支持内容</label>
+                    <p class="control">
+                        {{ data.support }}
+                    </p>
+                    <label class="label">设计类型</label>
+                    <p class="control">
+                        {{ data.des_type_name }}
+                    </p>
                 {% else %}
-                <label class="label">需求受众</label>
-                <p class="control">
-                    {{ data.audience_name }}
-                </p>
-                <label class="label">需求来源</label>
-                <p class="control">
-                    {{ data.source }}
-                </p>
-                <label class="label">需求类型</label>
-                <p class="control">
-                    {{ data.type }}
-                </p>
-                <label class="label">针对产品线或业务</label>
-                <p class="control">
-                    {{ data.category }}
-                </p>
+                    <label class="label">需求受众</label>
+                    <p class="control">
+                        {{ data.audience_name }}
+                    </p>
+                    <label class="label">需求来源</label>
+                    <p class="control">
+                        {{ data.source }}
+                    </p>
+                    <label class="label">需求类型</label>
+                    <p class="control">
+                        {{ data.type }}
+                    </p>
+                    <label class="label">针对产品线或业务</label>
+                    <p class="control">
+                        {{ data.category }}
+                    </p>
                 {% endif %}
                 <label class="label">概述</label>
                 <p class="control">
@@ -118,40 +127,40 @@
                 </p>
                 <label class="label">补充说明</label>
                 <p class="control">
-                    <p class="content">{{ data.details|safe }}</p>
+                <div class="content">{{ data.details|safe }}</div>
                 </p>
             </div>
         </div>
-        </section>
-    </div>
+    </section>
+</div>
 
-    {% include 'front/_footer.html' %}
+{% include 'front/_footer.html' %}
 
-    <!--Import jQuery-->
-    <script type="text/javascript" src="../../static/back/node_modules/jquery/dist/jquery.min.js"></script>
-    <!--Import CommonJS-->
-    <script src="../../static/back/scripts/common.min.js" charset="utf-8"></script>
-    <!--Import metisMenuJS-->
-    <script src="../../static/back/node_modules/metismenu/dist/metisMenu.min.js"></script>
-    <script>
-        $(function() {
-            $('.menu-list').metisMenu({
-                toggle: false,
-            });
+<!--Import jQuery-->
+<script type="text/javascript" src="../../static/back/node_modules/jquery/dist/jquery.min.js"></script>
+<!--Import CommonJS-->
+<script src="../../static/back/scripts/common.min.js" charset="utf-8"></script>
+<!--Import metisMenuJS-->
+<script src="../../static/back/node_modules/metismenu/dist/metisMenu.min.js"></script>
+<script>
+    $(function () {
+        $('.menu-list').metisMenu({
+            toggle: false,
         });
-    </script>
-    <!-- datetimepicker JavaScript -->
-    <script src="../../static/back/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
-    <script>
-        $('#design_done_time, #online_time').datetimepicker({
-              lang:"ch",           //语言选择中文
-              yearStart: 2016,     //设置最小年份
-              yearEnd: 2050,        //设置最大年份
-              todayButton: false, //关闭选择今天按钮
-              validateOnBlur:false,  //关闭强制输入一个默认值
-              allowTimes:['12:00', '14:00', '18:00']
-        });
-    </script>
+    });
+</script>
+<!-- datetimepicker JavaScript -->
+<script src="../../static/back/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
+<script>
+    $('#design_done_time, #online_time').datetimepicker({
+        lang: "ch",           //语言选择中文
+        yearStart: 2016,     //设置最小年份
+        yearEnd: 2050,        //设置最大年份
+        todayButton: false, //关闭选择今天按钮
+        validateOnBlur: false,  //关闭强制输入一个默认值
+        allowTimes: ['12:00', '14:00', '18:00']
+    });
+</script>
 </body>
 
 </html>

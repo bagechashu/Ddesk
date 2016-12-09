@@ -125,3 +125,9 @@ class TagForm(Form):
     category_id = SelectField('所属分类', validators=[DataRequired('所属分类必须指定。')], coerce=int)
     submit = SubmitField('保存')
 
+
+# 评价
+class IssueEvaluateForm(Form):
+    evaluate = RadioField('评价', validators=[DataRequired('请您评价一下')], choices=[(1, '好评'), (2, '中评'),  (3, '差评')], coerce=int)
+    details = TextAreaField('详情')
+    submit = SubmitField('提交')

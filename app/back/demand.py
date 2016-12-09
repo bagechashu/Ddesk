@@ -37,8 +37,9 @@ def demand():
                          'creator': {'name': item.creator.name, 'tel': item.creator.tel},
                          'assignee': {'name': assignee_name},
                          'design_done_time': extend.get('design_done_time'),
-                         'online_time': extend.get('online_time')}
+                         'online_time': extend.get('online_time'), 'evaluate': extend.get('evaluate')}
             data.append(item_dict)
+    print(data)
     return render_template('back/demand.html', data=data, status_code=status_code)
 
 
@@ -51,7 +52,8 @@ def edit_demand():
     extend = eval(this_issue.extend)
     data = {'id': this_issue.id, 'status': config.ISSUE_STATUS[this_issue.status], 'title': this_issue.title,
              'creator': {'name': this_issue.creator.name, 'tel': this_issue.creator.tel},
-             'create_time': this_issue.create_time, 'details': this_issue.details, 'class_id': extend['class_id']}
+             'create_time': this_issue.create_time, 'details': this_issue.details, 'class_id': extend['class_id'],
+            'evaluate': extend.get('evaluate')}
     if extend['class_id'] == 2:
         supports = extend['support_id']
         support1 = ''
