@@ -85,6 +85,17 @@ class DingTalk:
                                           {'key': '提出时间:', 'value': data['create_time']}, {'key': '诉求:', 'value': data['title']}],
                                  "content": choice(say)}}}
 
+        if category == 5:
+            r_data = {'chatid': self.chatid, 'sender': 'dzp', 'msgtype': 'oa',
+                      'oa': {'message_url': url, 'pc_message_url': url,
+                             'head': {
+                                 'bgcolor': 'FF222324',
+                                 'text': '这么久了还没搞完？'},
+                             'body': {
+                                 'form': [{'key': '流水号:', 'value': data['num']}, {'key': '提出人:', 'value': data['create_customer']},
+                                          {'key': '提出时间:', 'value': data['create_time']}, {'key': '诉求:', 'value': data['title']}],
+                                 "content": '久而不决是为何？及时反馈要记得！'}}}
+
         r = requests.post('https://oapi.dingtalk.com/chat/send?access_token=' + access_token, data=json.dumps(r_data),
                           verify=True, headers=headers)
         return r.json()
