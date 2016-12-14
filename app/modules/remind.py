@@ -30,7 +30,7 @@ def time_out_and_no_assignee():
                     ding.msg(category=4, url=url, data=data)
         all_time_out_issue = Issue.query.filter(Issue.status < 30).all()
         for item in all_time_out_issue:
-            if datetime.datetime.now() - item.create_time > datetime.timedelta(days=20):
+            if datetime.datetime.now() - item.modify_time > datetime.timedelta(days=20):
                 extend = eval(item.extend)
                 data = {'num': item.id, 'title': item.title, 'create_customer': item.creator.name,
                         'create_time': item.create_time.strftime("%Y-%m-%d %H:%M:%S"), 'class_id': extend['class_id']}
