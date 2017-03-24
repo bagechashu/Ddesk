@@ -18,14 +18,14 @@ def question():
     status_code = request.args.get('status')
     if status_code == '30':
         if current_user.super_admin:
-            all_question = Issue.query.filter_by(status=30).all()
+            all_question = Issue.query.filter(Issue.status >= 30).all()
         else:
-            all_question = Issue.query.filter_by(status=30, assignee_id=current_user.id).all()
+            all_question = Issue.query.filter(Issue.status >= 30).filter_by(assignee_id=current_user.id).all()
     else:
         if current_user.super_admin:
-            all_question = Issue.query.filter(Issue.status != 30).all()
+            all_question = Issue.query.filter(Issue.status < 30).all()
         else:
-            all_question = Issue.query.filter(Issue.status != 30, Issue.assignee_id == current_user.id).all()
+            all_question = Issue.query.filter(Issue.status < 30, Issue.assignee_id == current_user.id).all()
     data = []
     for item in all_question:
         extend = eval(item.extend)

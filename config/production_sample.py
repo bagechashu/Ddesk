@@ -12,12 +12,6 @@ class ProductionConfig(Config):
     SQLALCHEMY_POOL_SIZE = 10
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
-    # UPYUN
-    UPYUN_BUCKET = ''
-    UPYUN_USERNAME = ''
-    UPYUN_PASSWORD = ''
-    UPYUN_DOMAIN = ''
-
     # Other
     LOGIN_TOKEN = ''
 
