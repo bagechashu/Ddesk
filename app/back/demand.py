@@ -39,7 +39,6 @@ def demand():
                          'design_done_time': extend.get('design_done_time'),
                          'online_time': extend.get('online_time'), 'evaluate': extend.get('evaluate')}
             data.append(item_dict)
-    print(data)
     return render_template('back/demand.html', data=data, status_code=status_code)
 
 

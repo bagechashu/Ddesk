@@ -26,7 +26,7 @@ login_manager.login_message_category = 'alert-danger is-danger'
 
 # 接口初始化
 # 钉钉
-ding = dingtalk.DingTalk(config.DINGTALK_API_CID, config.DINGTALK_API_SECRET, config.DINGTALK_API_MSGID)
+ding = dingtalk.DingTalk(config.DINGTALK_API_CID, config.DINGTALK_API_SECRET, config.DINGTALK_API_MSGID, config.DINGTALK_ROBOT_ACCESS_TOKEN)
 # 阿里大鱼短信
 alidayu = alidayu.RestApi(key=config.TAOBAO_API_KEY, secret=config.TAOBAO_API_SECRET, sms_free_sign_name='一融需求系统',
                           url='https://eco.taobao.com/router/rest')

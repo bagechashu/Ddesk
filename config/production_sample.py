@@ -15,6 +15,9 @@ class ProductionConfig(Config):
     # Other
     LOGIN_TOKEN = ''
 
+    # DingTalk
+    DINGTALK_ROBOT_ACCESS_TOKEN = ''
+
     # SMS API
     TAOBAO_API_KEY = ''
     TAOBAO_API_SECRET = ''

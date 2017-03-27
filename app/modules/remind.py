@@ -22,25 +22,29 @@ def time_out_and_no_assignee():
                 data = {'num': item.id, 'title': item.title, 'create_customer': item.creator.name,
                         'create_time': item.create_time.strftime("%Y-%m-%d %H:%M:%S"), 'class_id': extend['class_id']}
                 if extend['class_id'] == 1:
-                    url = 'http://chanpin.xinlonghang.cn/back/question/edit?id=' + str(item.id) + '&type=html5'
+                    url = 'http://chanpin.xinlonghang.cn/back/question/edit?id=' + str(item.id)
                     ding.msg(category=4, url=url, data=data)
 
                 else:
-                    url = 'http://chanpin.xinlonghang.cn/back/demand/edit?id=' + str(item.id) + '&type=html5' + '&class=' + str(extend['class_id'])
+                    url = 'http://chanpin.xinlonghang.cn/back/demand/edit?id=' + str(item.id) + '&class=' + str(extend['class_id'])
                     ding.msg(category=4, url=url, data=data)
-        all_time_out_issue = Issue.query.filter(Issue.status < 30).all()
+
+        all_time_out_issue = Issue.query.filter(Issue.status < 30, Issue.assignee_id > 0).all()
         for item in all_time_out_issue:
             if datetime.datetime.now() - item.modify_time > datetime.timedelta(days=20):
                 extend = eval(item.extend)
+
                 data = {'num': item.id, 'title': item.title, 'create_customer': item.creator.name,
-                        'create_time': item.create_time.strftime("%Y-%m-%d %H:%M:%S"), 'class_id': extend['class_id']}
+                        'assignee': item.assignee.tel, 'create_time': item.create_time.strftime("%Y-%m-%d %H:%M:%S"),
+                        'class_id': extend['class_id']}
                 if extend['class_id'] == 1:
-                    url = 'http://chanpin.xinlonghang.cn/back/question/edit?id=' + str(item.id) + '&type=html5'
+                    url = 'http://chanpin.xinlonghang.cn/back/question/edit?id=' + str(item.id)
                     ding.msg(category=5, url=url, data=data)
 
                 else:
-                    url = 'http://chanpin.xinlonghang.cn/back/demand/edit?id=' + str(item.id) + '&type=html5' + '&class=' + str(extend['class_id'])
+                    url = 'http://chanpin.xinlonghang.cn/back/demand/edit?id=' + str(item.id) + '&class=' + str(extend['class_id'])
                     ding.msg(category=5, url=url, data=data)
+
         remind_task.value = datetime.datetime.now()
         db.session.add(remind_task)
         db.session.commit()

@@ -6,34 +6,18 @@ __mtime__ = '16/9/1' '14:35'
 import requests
 import requests.packages.urllib3.util.ssl_
 import json
-from random import choice
 
 
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = 'ALL'
 headers = {'content-type': "application/json"}
-say = ['伟大的金主席教导我们：“该谁管的事情谁不管，该谁拿的工资谁别拿！” - 《金主席语录》',
-       '伟大的金主席教导我们：“工单要是看不见，回头叫你请宝燕！” - 《金主席语录》',
-       '伟大的金主席教导我们：“工单不处理，一会打死你！” - 《金主席语录》',
-       '伟大的金主席教导我们：“谁的工单不反馈，回头一起吃最贵；括弧：你结账！” - 《金主席语录》',
-       '伟大的金主席教导我们：“小小工单搞不好，同事关系完蛋鸟！” - 《金主席语录》',
-       '伟大的金主席教导我们：“工单搞的快，处处惹人爱！” - 《金主席语录》',
-       '伟大的金主席教导我们：“要想高总别找你，工单赶紧快处理！” - 《金主席语录》',
-       '伟大的金主席教导我们：“同事们的需求是我们人生的追求，同事们的工单是我们心灵的港湾！” - 《金主席语录》',
-       '伟大的金主席教导我们：“工单弄的好，美女少不了！” - 《金主席语录》',
-       '伟大的金主席教导我们：“工单弄的快，人也长得帅！” - 《金主席语录》',
-       '伟大的金主席教导我们：“今天工单搞不好，明天老婆跟人跑！” - 《金主席语录》',
-       '伟大的金主席教导我们：“有人提问题，我们就要回复；有人提需求，我们就要处理；但有人胆敢要我们请客，我们就嫩（nèng)死他！” - 《金主席语录》',
-       '伟大的金主席教导我们：“俗话说得好，工单快点搞！” - 《金主席语录》',
-       '伟大的金主席教导我们：“是你的工单你不管，是你的工资给我拿！” - 《金主席语录》',
-       '伟大的金主席教导我们：“雄关漫道真如铁，而今工单赶紧干！” - 《金主席语录》',
-       '伟大的金主席教导我们：“多少工单，从来急，天地转，光阴迫，一万年太久，只争朝夕！” - 《金主席语录》']
 
 
 class DingTalk:
-    def __init__(self, key, secret, chatid):
+    def __init__(self, key, secret, chatid, token):
         self.key = key
         self.secret = secret
         self.chatid = chatid
+        self.token = token
 
     def get_token(self):
         args = {'corpid': self.key, 'corpsecret': self.secret}
@@ -44,6 +28,7 @@ class DingTalk:
 
     def msg(self, category, url, data):
         access_token = self.get_token()
+        robot_access_token = self.token
         r_data = {}
         if category == 1:
             r_data = {'chatid': self.chatid, 'sender': 'dzp', 'msgtype': 'oa',
@@ -75,30 +60,25 @@ class DingTalk:
                                           {"key": "需求来源:", "value": data['source']}, {"key": "产品线:", "value": data['category']}],
                                  "content": "点击「查看详情」登录需求管理系统后，即可在钉钉里处理需求"}}}
         if category == 4:
-            r_data = {'chatid': self.chatid, 'sender': 'dzp', 'msgtype': 'oa',
-                      'oa': {'message_url': url, 'pc_message_url': url,
-                             'head': {
-                                 'bgcolor': 'FFED6C63',
-                                 'text': '工单怎么没人管？是谁负责的？'},
-                             'body': {
-                                 'form': [{'key': '流水号:', 'value': data['num']}, {'key': '提出人:', 'value': data['create_customer']},
-                                          {'key': '提出时间:', 'value': data['create_time']}, {'key': '诉求:', 'value': data['title']}],
-                                 "content": choice(say)}}}
+            content = str(data['create_customer']) + ' 在 ' + str(data['create_time']) + ' 提出的「' + str(data['title']) \
+                      + '」，超过了受理时限尚无人受理，请群内同事尽快受理。' + str(url)
+            r_data = {'msgtype': 'text',
+                      'text': {'content': content}, 'at': {'atMobiles': [], 'isAtAll': 1}}
 
         if category == 5:
-            r_data = {'chatid': self.chatid, 'sender': 'dzp', 'msgtype': 'oa',
-                      'oa': {'message_url': url, 'pc_message_url': url,
-                             'head': {
-                                 'bgcolor': 'FF222324',
-                                 'text': '这么久了还没搞完？'},
-                             'body': {
-                                 'form': [{'key': '流水号:', 'value': data['num']}, {'key': '提出人:', 'value': data['create_customer']},
-                                          {'key': '提出时间:', 'value': data['create_time']}, {'key': '诉求:', 'value': data['title']}],
-                                 "content": '久而不决是为何？及时反馈要记得！'}}}
+            content = str(data['create_customer']) + ' 在 ' + str(data['create_time']) + '提出的「' + str(data['title']) \
+                      + '」，超过了规定的处理时间且没有任何反馈，请被@到的人及时登录后台处理。' + str(url)
+            r_data = {'msgtype': 'text',
+                      'text': {'content': content}, 'at': {'atMobiles': [data['assignee']], 'isAtAll': 0}}
 
-        r = requests.post('https://oapi.dingtalk.com/chat/send?access_token=' + access_token, data=json.dumps(r_data),
+        if category < 4:
+            r = requests.post('https://oapi.dingtalk.com/chat/send?access_token=' + access_token, data=json.dumps(r_data),
                           verify=True, headers=headers)
-        return r.json()
+        else:
+            r = requests.post('https://oapi.dingtalk.com/robot/send?access_token=' + robot_access_token, data=json.dumps(r_data),
+                              verify=True, headers=headers)
+
+        return True
 
     def get_department(self):
         access_token = {'access_token': self.get_token()}
