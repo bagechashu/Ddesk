@@ -44,6 +44,16 @@
                         处理完毕，待您评价
                     </a>
                 </li>
+                <li {% if status == '40' %}class="is-active"{% endif %}>
+                    <a href="{{ url_for('.query', status=40) }}">
+                        不予处理
+                    </a>
+                </li>
+                <li {% if status == '41' %}class="is-active"{% endif %}>
+                    <a href="{{ url_for('.query', status=41) }}">
+                        搁置（现阶段无法处理）
+                    </a>
+                </li>
                 <li {% if status == '31' %}class="is-active"{% endif %}>
                     <a href="{{ url_for('.query', status=31) }}">
                         已评价
