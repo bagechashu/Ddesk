@@ -93,6 +93,7 @@ def sync_user():
         for sys_user in all_user:
             if sys_user.oa_id not in oa_user_list:
                 sys_user.status = False
+                sys_user.close_time = datetime.now()
                 db.session.add(sys_user)
             db.session.commit()
         flash('数据同步完成。', 'is-success')

@@ -39,6 +39,7 @@
                         <th>电话</th>
                         <th>管理员权限</th>
                         <th>状态</th>
+                        <th>创建／冻结时间</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -64,6 +65,7 @@
                             <span class="tag is-danger">冻结</span>
                             {% endif %}
                         </td>
+                        <td>{{ item.create_time }}/{{ item.close_time }}</td>
                         <td><a href="{{ url_for('.edit_user', id=item.id) }}">编辑</a></td>
                     </tr>
                     {% endfor %}

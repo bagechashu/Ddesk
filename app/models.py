@@ -63,6 +63,7 @@ class User(UserMixin, db.Model):
     department = db.Column(db.Text)  # 部门
     create_time = db.Column(db.DateTime, default=datetime.now)  # 账号创建时间
     modify_time = db.Column(db.DateTime, default=datetime.now)  # 账号修改时间
+    close_time = db.Column(db.DateTime)  # 账号注销时间
     admin = db.Column(db.Boolean, default=False)  # 是否管理员
     super_admin = db.Column(db.Boolean, default=False)  # 是否超级管理员
     status = db.Column(db.Boolean, default=True)  # 账号状态:正常 / 冻结
