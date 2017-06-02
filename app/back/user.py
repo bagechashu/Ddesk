@@ -91,7 +91,7 @@ def sync_user():
                     db.session.add(old_user)
                 db.session.commit()
         for sys_user in all_user:
-            if sys_user.oa_id not in oa_user_list:
+            if sys_user.oa_id not in oa_user_list and sys_user.status is True:
                 sys_user.status = False
                 sys_user.close_time = datetime.now()
                 db.session.add(sys_user)
