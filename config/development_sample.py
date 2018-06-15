@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 from .default import Config
+import os
+
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class DevelopmentConfig(Config):
     # Flask
     DEBUG = True
-    SECRET_KEY = ''
+    SECRET_KEY = 'hjlkjhgvjhkluyiglbkj'
 
-    # Mysql(SQLalchemy)
-    SQLALCHEMY_DATABASE_URI = ''
-    SQLALCHEMY_POOL_SIZE = 10
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    ## Mysql(SQLalchemy)
+    # SQLALCHEMY_DATABASE_URI = ''
+    # SQLALCHEMY_POOL_SIZE = 10
+    # SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+    # SQLite(SQLalchemy)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
 
     # Other
     LOGIN_TOKEN = ''
